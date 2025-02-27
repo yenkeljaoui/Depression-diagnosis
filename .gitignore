@@ -51,6 +51,7 @@ ExportedObj/
 *.pidb.meta
 *.pdb.meta
 *.mdb.meta
+*.cs.meta
 
 # Unity3D generated file on crash reports
 sysinfo.txt
@@ -59,7 +60,6 @@ sysinfo.txt
 *.apk
 *.aab
 *.unitypackage
-*.unitypackage.meta
 *.app
 
 # Crashlytics generated file
@@ -71,25 +71,3 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
-
-# Ignore Unity auto-generated Editor files
-/[Aa]ssets/Editor/
-/[Aa]ssets/Editor.meta
-
-# Ignore temporary scene files
-/[Aa]ssets/InitTestScene*.unity
-/[Aa]ssets/InitTestScene*.unity.meta
-
-# Ignore third-party assets that should not be committed
-/[Aa]ssets/NatureManufacture Assets/
-/[Aa]ssets/NatureManufacture Assets.meta
-/[Aa]ssets/Oculus Hands/
-/[Aa]ssets/Oculus Hands.meta
-/[Aa]ssets/TextMesh Pro/
-/[Aa]ssets/TextMesh Pro.meta
-
-# Ignore test and sample assets
-/[Aa]ssets/Play Tests/
-/[Aa]ssets/Play Tests.meta
-/[Aa]ssets/Samples/
-/[Aa]ssets/Samples.meta
