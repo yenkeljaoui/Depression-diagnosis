@@ -1,0 +1,51 @@
+name: Unity CI - PC Build and Tests
+
+on:
+  push:
+    branches: [dev]
+  pull_request:
+    branches: [dev]
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Cache Unity packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/unity
+          key: ${{ runner.os }}-unity-${{ hashFiles('**/Packages/manifest.json') }}
+
+      - name: Install Unity
+        uses: game-ci/unity-installer@v2
+        with:
+          unityVersion: '2023.2.0f1'
+
+      - name: Run Editmode Tests
+        uses: game-ci/unity-test-runner@v2
+        with:
+          unityVersion: '2023.2.0f1'
+          testMode: editmode
+
+      - name: Run Playmode Tests
+        uses: game-ci/unity-test-runner@v2
+        with:
+          unityVersion: '2023.2.0f1'
+          testMode: playmode
+
+      - name: Build Windows (PC)
+        uses: game-ci/unity-builder@v2
+        with:
+          unityVersion: '2023.2.0f1'
+          targetPlatform: Android
+
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Windows-Build
+          path: build/
