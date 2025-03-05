@@ -1,51 +1,38 @@
-name: Unity CI - PC Build and Tests
+name: Unity CI - Tests Only  # Name of the workflow (you'll see this in GitHub Actions)
 
 on:
   push:
-    branches: [dev]
+    branches: [dev]  # Run this workflow on pushes to the 'dev' branch
   pull_request:
-    branches: [dev]
+    branches: [dev]  # Run this workflow on pull requests targeting the 'dev' branch
 
 jobs:
-  test-and-build:
-    runs-on: ubuntu-latest
+  tests:  # Name of the job
+    runs-on: ubuntu-latest  # The virtual machine that will run the job (Linux)
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repository  # Step 1: Get your code from GitHub
         uses: actions/checkout@v3
 
-      - name: Cache Unity packages
+      - name: Cache Unity packages  # Step 2: Cache Unity dependencies to speed up builds
         uses: actions/cache@v3
         with:
           path: ~/.cache/unity
           key: ${{ runner.os }}-unity-${{ hashFiles('**/Packages/manifest.json') }}
 
-      - name: Install Unity
+      - name: Install Unity  # Step 3: Install Unity with your specific version
         uses: game-ci/unity-installer@v2
         with:
-          unityVersion: '2023.2.0f1'
+          unityVersion: '2023.2.0f1'  # Your exact Unity version
 
-      - name: Run Editmode Tests
+      - name: Run Editmode Tests  # Step 4: Run Unity Editmode tests (for editor-level code)
         uses: game-ci/unity-test-runner@v2
         with:
           unityVersion: '2023.2.0f1'
-          testMode: editmode
+          testMode: editmode  # Run editmode tests
 
-      - name: Run Playmode Tests
+      - name: Run Playmode Tests  # Step 5: Run Unity Playmode tests (for in-game testing)
         uses: game-ci/unity-test-runner@v2
         with:
           unityVersion: '2023.2.0f1'
-          testMode: playmode
-
-      - name: Build Windows (PC)
-        uses: game-ci/unity-builder@v2
-        with:
-          unityVersion: '2023.2.0f1'
-          targetPlatform: Android
-
-
-      - name: Upload Build Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: Windows-Build
-          path: build/
+          testMode: playmode  # Run playmode tests
