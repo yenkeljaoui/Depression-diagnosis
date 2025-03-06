@@ -1,5 +1,6 @@
 name: Unity CI - Tests Only
 
+# Trigger the workflow on push or pull request events to the 'dev' branch
 on:
   push:
     branches: [dev]
@@ -8,37 +9,38 @@ on:
 
 jobs:
   tests:
+    # Specify the environment to run the job using a Unity editor Docker image
     runs-on: unityci/editor:ubuntu-2023.2.3f1-android-3
 
     steps:
-      # שלב 1: משיכת הקוד
+   
+      # Step 1: Checkout the repository code
       - name: Checkout
         uses: actions/checkout@v3
 
-      # שלב 2 (אופציונלי): Cache Unity packages
+      # Step 2: Cache Unity packages to speed up the build process
       - name: Cache Unity packages
         uses: actions/cache@v3
         with:
           path: ~/.cache/unity
           key: ${{ runner.os }}-unity-${{ hashFiles('**/Packages/manifest.json') }}
 
-      # שלב 3: הפעלת רישיון Unity (Personal) בעזרת אימייל וסיסמה
-      # כאן אנו משתמשים ב-main במקום v4.x
+      # Step 3: Activate Unity license using credentials stored in GitHub Secrets
       - name: Activate Unity
         uses: game-ci/unity-activate@main
         with:
           unityEmail: ${{ secrets.UNITY_EMAIL }}
           unityPassword: ${{ secrets.UNITY_PASSWORD }}
-          unityVersion: '2023.2.0f1'  # שנה/התאם לפי גרסת Unity הרצויה
+          unityVersion: '2023.2.0f1'  
 
-      # שלב 4: הרצת בדיקות Editmode
+      # Step 4: Run Editmode tests (tests that run without entering Play mode)
       - name: Run Editmode Tests
         uses: game-ci/unity-test-runner@v4.3.1
         with:
           unityVersion: '2023.2.0f1'
           testMode: editmode
 
-      # שלב 5: הרצת בדיקות Playmode
+      # Step 5: Run Playmode tests (tests that run while the game is playing)
       - name: Run Playmode Tests
         uses: game-ci/unity-test-runner@v4.3.1
         with:
