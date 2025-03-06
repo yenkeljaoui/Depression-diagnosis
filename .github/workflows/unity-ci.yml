@@ -32,14 +32,14 @@ jobs:
 
       # 4) Run Editmode Tests
       - name: Run Editmode Tests
-        uses: game-ci/unity-test-runner@v4
+        uses: game-ci/unity-activate@main
         with:
           unityVersion: '2023.2.0f1'
           testMode: editmode
 
       # 5) Run Playmode Tests
       - name: Run Playmode Tests
-        uses: game-ci/unity-test-runner@v4
+        uses: game-ci/unity-activate@main
         with:
           unityVersion: '2023.2.0f1'
           testMode: playmode
