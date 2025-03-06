@@ -1,7 +1,5 @@
-# ✅ Workflow name (visible in the GitHub Actions UI)
 name: Unity CI - Tests Only
 
-# ✅ Trigger the workflow on push or pull request to the 'dev' branch
 on:
   push:
     branches: [dev]
@@ -10,58 +8,38 @@ on:
 
 jobs:
   tests:
-    # ✅ This job runs on a Windows machine
     runs-on: windows-latest
 
     steps:
-      # ---------------------------------------------------------
-      # Step 1: Checkout the repository code onto the runner
-      # ---------------------------------------------------------
-      - name: Checkout repository
+      # 1) Check out your code
+      - name: Checkout
         uses: actions/checkout@v3
 
-      # ---------------------------------------------------------
-      # Step 2: (Optional) Cache Unity packages
-      #
-      # Caching can speed up subsequent builds/tests by reusing
-      # downloaded packages. If you encounter issues, you can
-      # remove or comment out this step.
-      # ---------------------------------------------------------
+      # 2) (Optional) Cache Unity packages
       - name: Cache Unity packages
         uses: actions/cache@v3
         with:
           path: ~/.cache/unity
-          # The key is based on the OS + hash of manifest.json
-          # so it updates if dependencies change.
           key: ${{ runner.os }}-unity-${{ hashFiles('**/Packages/manifest.json') }}
 
-      # ---------------------------------------------------------
-      # Step 3: Run Edit Mode Tests
-      #
-      # We provide:
-      # - unityVersion: The Unity version to install/use
-      # - testMode: Which type of tests to run (editmode/playmode)
-      # - unityEmail / unityPassword: GitHub Secrets used to
-      #   log in to Unity and automatically activate the
-      #   Personal license.
-      # ---------------------------------------------------------
+      # 3) Activate Unity (Personal License) using your email & password
+      - name: Activate Unity
+        uses: game-ci/unity-activate@v4
+        with:
+          unityEmail: ${{ secrets.UNITY_EMAIL }}
+          unityPassword: ${{ secrets.UNITY_PASSWORD }}
+          unityVersion: '2023.2.0f1'  # or whichever version you need
+
+      # 4) Run Editmode Tests
       - name: Run Editmode Tests
-        uses: game-ci/unity-test-runner@v4.3.1
+        uses: game-ci/unity-test-runner@v4
         with:
           unityVersion: '2023.2.0f1'
           testMode: editmode
-          unityEmail: ${{ secrets.UNITY_EMAIL }}
-          unityPassword: ${{ secrets.UNITY_PASSWORD }}
 
-      # ---------------------------------------------------------
-      # Step 4: Run Play Mode Tests
-      #
-      # Same approach as above, but for playmode tests.
-      # ---------------------------------------------------------
+      # 5) Run Playmode Tests
       - name: Run Playmode Tests
-        uses: game-ci/unity-test-runner@v4.3.1
+        uses: game-ci/unity-test-runner@v4
         with:
           unityVersion: '2023.2.0f1'
           testMode: playmode
-          unityEmail: ${{ secrets.UNITY_EMAIL }}
-          unityPassword: ${{ secrets.UNITY_PASSWORD }}
