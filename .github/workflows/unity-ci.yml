@@ -1,4 +1,4 @@
-# ✅ Workflow name (appears in the GitHub Actions UI)
+# ✅ Workflow name (visible in the GitHub Actions UI)
 name: Unity CI - Tests Only
 
 # ✅ Trigger the workflow on push or pull request to the 'dev' branch
@@ -9,32 +9,59 @@ on:
     branches: [dev]
 
 jobs:
-  tests:  # ✅ Name of the job
-    runs-on: windows-latest  # ✅ GitHub will use the latest Ubuntu machine to run this job
+  tests:
+    # ✅ This job runs on a Windows machine
+    runs-on: windows-latest
 
     steps:
-      # ✅ Step 1: Checkout the repository code to the runner
+      # ---------------------------------------------------------
+      # Step 1: Checkout the repository code onto the runner
+      # ---------------------------------------------------------
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # ✅ Step 2: Cache Unity packages to speed up the workflow
+      # ---------------------------------------------------------
+      # Step 2: (Optional) Cache Unity packages
+      #
+      # Caching can speed up subsequent builds/tests by reusing
+      # downloaded packages. If you encounter issues, you can
+      # remove or comment out this step.
+      # ---------------------------------------------------------
       - name: Cache Unity packages
         uses: actions/cache@v3
         with:
-          path: ~/.cache/unity  # ✅ Path to cache Unity downloads and dependencies
+          path: ~/.cache/unity
+          # The key is based on the OS + hash of manifest.json
+          # so it updates if dependencies change.
           key: ${{ runner.os }}-unity-${{ hashFiles('**/Packages/manifest.json') }}
-          # ✅ Key ensures the cache updates if the manifest.json changes
 
-      # ✅ Step 3: Run Editmode tests (tests that run inside the Unity editor)
+      # ---------------------------------------------------------
+      # Step 3: Run Edit Mode Tests
+      #
+      # We provide:
+      # - unityVersion: The Unity version to install/use
+      # - testMode: Which type of tests to run (editmode/playmode)
+      # - unityEmail / unityPassword: GitHub Secrets used to
+      #   log in to Unity and automatically activate the
+      #   Personal license.
+      # ---------------------------------------------------------
       - name: Run Editmode Tests
         uses: game-ci/unity-test-runner@v4.3.1
         with:
-          unityVersion: '2023.2.0f1'  # ✅ Unity version to use for testing
-          testMode: editmode  # ✅ Specify Editmode tests
+          unityVersion: '2023.2.0f1'
+          testMode: editmode
+          unityEmail: ${{ secrets.UNITY_EMAIL }}
+          unityPassword: ${{ secrets.UNITY_PASSWORD }}
 
-      # ✅ Step 4: Run Playmode tests (tests that run in play mode)
+      # ---------------------------------------------------------
+      # Step 4: Run Play Mode Tests
+      #
+      # Same approach as above, but for playmode tests.
+      # ---------------------------------------------------------
       - name: Run Playmode Tests
         uses: game-ci/unity-test-runner@v4.3.1
         with:
-          unityVersion: '2023.2.0f1'  # ✅ Unity version to use for testing
-          testMode: playmode  # ✅ Specify Playmode tests
+          unityVersion: '2023.2.0f1'
+          testMode: playmode
+          unityEmail: ${{ secrets.UNITY_EMAIL }}
+          unityPassword: ${{ secrets.UNITY_PASSWORD }}
