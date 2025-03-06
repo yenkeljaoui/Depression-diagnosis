@@ -27,14 +27,14 @@ jobs:
 
       # ✅ Step 3: Run Editmode tests (tests that run inside the Unity editor)
       - name: Run Editmode Tests
-        uses: game-ci/unity-test-runner@v2
+        uses: game-ci/unity-test-runner@v4.3.1
         with:
           unityVersion: '2023.2.0f1'  # ✅ Unity version to use for testing
           testMode: editmode  # ✅ Specify Editmode tests
 
       # ✅ Step 4: Run Playmode tests (tests that run in play mode)
       - name: Run Playmode Tests
-        uses: game-ci/unity-test-runner@v2
+        uses: game-ci/unity-test-runner@v4.3.1
         with:
           unityVersion: '2023.2.0f1'  # ✅ Unity version to use for testing
           testMode: playmode  # ✅ Specify Playmode tests
