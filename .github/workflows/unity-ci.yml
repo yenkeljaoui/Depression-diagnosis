@@ -1,3 +1,52 @@
+# name: Unity CI - Tests Only
+
+# on:
+#   push:
+#     branches: [dev]
+#   pull_request:
+#     branches: [dev]
+
+# jobs:
+#   tests:
+#     runs-on: windows-latest
+
+#     steps:
+#       # 1) Check out your code
+#       - name: Checkout
+#         uses: actions/checkout@v3
+
+#       # 2) (Optional) Cache Unity packages
+#       - name: Cache Unity packages
+#         uses: actions/cache@v3
+#         with:
+#           path: ~/.cache/unity
+#           key: ${{ runner.os }}-unity-${{ hashFiles('**/Packages/manifest.json') }}
+
+#       # 3) Activate Unity (Personal License) using your email & password
+#       - name: Activate Unity
+#         uses: game-ci/unity-activate@v4
+#         with:
+#           unityEmail: ${{ secrets.UNITY_EMAIL }}
+#           unityPassword: ${{ secrets.UNITY_PASSWORD }}
+#           unityVersion: '2023.2.0f1'  # or whichever version you need
+
+#       # 4) Run Editmode Tests
+#       - name: Run Editmode Tests
+#         uses: game-ci/unity-test-runner@v4
+#         with:
+#           unityVersion: '2023.2.0f1'
+#           testMode: editmode
+
+#       # 5) Run Playmode Tests
+#       - name: Run Playmode Tests
+#         uses: game-ci/unity-test-runner@v4
+#         with:
+#           unityVersion: '2023.2.0f1'
+#           testMode: playmode
+
+
+
+
 name: Unity CI - Tests Only
 
 on:
@@ -11,35 +60,30 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      # 1) Check out your code
       - name: Checkout
         uses: actions/checkout@v3
 
-      # 2) (Optional) Cache Unity packages
       - name: Cache Unity packages
         uses: actions/cache@v3
         with:
           path: ~/.cache/unity
           key: ${{ runner.os }}-unity-${{ hashFiles('**/Packages/manifest.json') }}
 
-      # 3) Activate Unity (Personal License) using your email & password
       - name: Activate Unity
-        uses: game-ci/unity-activate@v4
+        uses: game-ci/unity-activate@v4.1.0
         with:
           unityEmail: ${{ secrets.UNITY_EMAIL }}
           unityPassword: ${{ secrets.UNITY_PASSWORD }}
-          unityVersion: '2023.2.0f1'  # or whichever version you need
+          unityVersion: '2023.2.0f1'
 
-      # 4) Run Editmode Tests
       - name: Run Editmode Tests
-        uses: game-ci/unity-activate@main
+        uses: game-ci/unity-test-runner@v4.3.1
         with:
           unityVersion: '2023.2.0f1'
           testMode: editmode
 
-      # 5) Run Playmode Tests
       - name: Run Playmode Tests
-        uses: game-ci/unity-activate@main
+        uses: game-ci/unity-test-runner@v4.3.1
         with:
           unityVersion: '2023.2.0f1'
           testMode: playmode
