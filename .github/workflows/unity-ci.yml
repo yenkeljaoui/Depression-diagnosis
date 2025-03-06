@@ -10,7 +10,7 @@ on:
 
 jobs:
   tests:  # ✅ Name of the job
-    runs-on: ubuntu-latest  # ✅ GitHub will use the latest Ubuntu machine to run this job
+    runs-on: windows-latest  # ✅ GitHub will use the latest Ubuntu machine to run this job
 
     steps:
       # ✅ Step 1: Checkout the repository code to the runner
