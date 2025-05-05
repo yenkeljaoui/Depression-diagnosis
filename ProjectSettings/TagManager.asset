@@ -9,6 +9,7 @@ TagManager:
   - UI
   - Lake
   - Animal
+  - Torch
   layers:
   - Default
   - TransparentFX

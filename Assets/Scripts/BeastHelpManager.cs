@@ -4,6 +4,8 @@ public class BeastHelpManager : MonoBehaviour
 {
     public GameObject dialogCanvas;         // The world-space canvas with Yes/No buttons
     public PlayerDataManager playerDataManager; // The object writeing in the file data
+    public GameObject task_Scenario2;
+
 
     private bool playerChoseToHelp = false;
 
@@ -19,6 +21,17 @@ public class BeastHelpManager : MonoBehaviour
 }
 
 
+private System.Collections.IEnumerator Showtask_Scenario2(float duration)
+{
+    if (task_Scenario2 != null)
+    {
+        task_Scenario2.SetActive(true);
+        yield return new WaitForSeconds(duration);
+        task_Scenario2.SetActive(false);
+    }
+}
+
+
     public void OnPlayerAcceptedHelp()
     {
         Time.timeScale = 1f;
@@ -26,7 +39,10 @@ public class BeastHelpManager : MonoBehaviour
         playerChoseToHelp = true;
 
         playerDataManager.LogEvent("BeastHelpChoice", "Player chose YES to help the beast");
-            }
+        StartCoroutine(Showtask_Scenario2(3f));
+
+
+    }
 
     public void OnPlayerDeclinedHelp()
     {
@@ -35,6 +51,8 @@ public class BeastHelpManager : MonoBehaviour
         playerChoseToHelp = false;
 
         playerDataManager.LogEvent("BeastHelpChoice", "Player chose NO to help the beast");
+         //begin scenario 3
+        FindFirstObjectByType<Scenario3Manager>()?.BeginScenario3();
     }
 
     public bool DidPlayerChooseToHelp()

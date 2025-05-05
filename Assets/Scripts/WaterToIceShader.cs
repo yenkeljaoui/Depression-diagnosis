@@ -13,6 +13,7 @@ public class LakeFreezingTrigger : MonoBehaviour
 
     void Start()
     {
+       // FindFirstObjectByType<Scenario3Manager>()?.BeginScenario3();
         lakeRenderer = GetComponent<Renderer>();
 
         if (lakeRenderer == null)
@@ -74,6 +75,10 @@ public void UnfreezeLake()
         if (playerDataManager != null)
         {
             playerDataManager.LogEvent("LakeUnfrozen", "Player touched the tree and unfroze the lake");
+            Debug.Log("Player touched the tree and unfroze the lake");
+            //begin scenario 3
+            FindFirstObjectByType<Scenario3Manager>()?.BeginScenario3();
+
         }
         else
         {

@@ -5,6 +5,7 @@ using System.Collections; // Needed for IEnumerator and coroutines
 
 public class GameMenuUiScenario1 : MonoBehaviour
 {
+    public GameObject tiger;
     public GameObject menu; // Main UI panel (Game Menu)
     public GameObject timeSelectionCanvas; // The Time Selection UI panel
     public Transform head; // XR Camera (Head)
@@ -189,6 +190,12 @@ public class GameMenuUiScenario1 : MonoBehaviour
         timerText.gameObject.SetActive(false);
         // Start a coroutine to close the Game Menu UI after 5 seconds
         StartCoroutine(CloseCanvasAfterDelay(5f));
+        //begin scenario 2
+        FindFirstObjectByType<Scenario2Manager>()?.BeginScenario2();
+        tiger.SetActive(true);
+
+
+    StartCoroutine(CloseCanvasAfterDelay(5f));
     }
 
     // Coroutine: Wait for the specified delay, then close the Game Menu UI

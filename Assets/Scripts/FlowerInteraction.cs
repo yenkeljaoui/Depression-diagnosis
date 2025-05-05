@@ -19,11 +19,11 @@ public class FlowerInteraction : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("נכנס: " + other.name);
+        Debug.Log("Enter: " + other.name);
 
         if (other.CompareTag("Player") && other.transform.root.gameObject.name == "XR Origin (XR Rig)")
         {
-            Debug.Log("יד נגעה בפרח");
+            Debug.Log("Hand tuch the tree");
             ToggleMaterials();
         }
     }

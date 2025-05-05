@@ -11,7 +11,6 @@ public class TreeUnfreezeTrigger : MonoBehaviour
     {
         if (hasUnfrozen) return;
 
-        // התנאי הזה כמו בפרח – מזהה רק את הידיים של השחקן
         if (other.CompareTag("Player") && other.transform.root.gameObject.name == "XR Origin (XR Rig)")
         {
             Debug.Log("Player touched the tree!");
