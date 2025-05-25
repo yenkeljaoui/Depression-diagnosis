@@ -27,7 +27,7 @@ private System.Collections.IEnumerator Showtask_Scenario2(float duration)
     {
         task_Scenario2.SetActive(true);
         yield return new WaitForSeconds(duration);
-        task_Scenario2.SetActive(false);
+        
     }
 }
 

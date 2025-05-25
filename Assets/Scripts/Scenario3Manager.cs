@@ -10,7 +10,7 @@ public class Scenario3Manager : MonoBehaviour
 
     [Tooltip("Empty GameObject marking the Scenario 3 start point")]
     public Transform scenario3StartPoint;
-
+    public GameObject instructionUI;//canvas campfire
     // internal cached components
     CharacterController cc;
     ContinuousMoveProviderBase mover;
@@ -34,6 +34,7 @@ public class Scenario3Manager : MonoBehaviour
     /// </summary>
     public void BeginScenario3()
     {
+        instructionUI.SetActive(true);//active canvas
         StartCoroutine(TeleportToScenario3());
     }
 

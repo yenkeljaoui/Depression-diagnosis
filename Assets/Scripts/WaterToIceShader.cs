@@ -8,6 +8,8 @@ public class LakeFreezingTrigger : MonoBehaviour
     private bool isFrozen = false; // Prevent multiple switches
     public BeastHelpManager helpManager; // Assign in Inspector
     public PlayerDataManager playerDataManager; // Assign in Inspector
+    public GameObject task_Scenario2; // canvas help scenario2
+    
 
 
 
@@ -22,7 +24,6 @@ public class LakeFreezingTrigger : MonoBehaviour
         }
         else
         {
-            Debug.Log("Lake material set to Water.");
             lakeRenderer.material = waterMaterial;
         }
     }
@@ -76,6 +77,7 @@ public void UnfreezeLake()
         {
             playerDataManager.LogEvent("LakeUnfrozen", "Player touched the tree and unfroze the lake");
             Debug.Log("Player touched the tree and unfroze the lake");
+            task_Scenario2.SetActive(false);
             //begin scenario 3
             FindFirstObjectByType<Scenario3Manager>()?.BeginScenario3();
 

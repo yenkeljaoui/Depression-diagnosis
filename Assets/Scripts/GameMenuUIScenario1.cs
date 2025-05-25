@@ -1,79 +1,83 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using System.Collections; // Needed for IEnumerator and coroutines
+using System.Collections;
 
 public class GameMenuUiScenario1 : MonoBehaviour
 {
-    public GameObject tiger;
-    public GameObject menu; // Main UI panel (Game Menu)
-    public GameObject timeSelectionCanvas; // The Time Selection UI panel
-    public Transform head; // XR Camera (Head)
-    public float spwnDistance = 10f; // Distance in front of the player
-    public float smoothSpeed = 5f; // UI movement speed
+    // -- Player name input UI ----------------------------------
+    public GameObject nameInputCanvas;            // Canvas for entering the player's name
+    public PlayerNameInputUI nameInputUI;         // Reference to the PlayerNameInputUI script
+    private bool nameEntered = false;             // Flag to track when the name has been entered
 
-    public Button continueButton; // The main continue button (for step tutorial)
-    public Button noonButton, eveningButton, nightButton; // Time selection buttons
-    public Button timeContinueButton; // The new Continue button in TimeSelectionCanvas
-    public TextMeshProUGUI instructionText; // Instruction text
-    public TextMeshProUGUI timerText; // Timer text
+    // -- Head-tracking reference ------------------------------
+    public Transform head;                        // XR camera (player's head) transform
 
-    private int step = 0; // Tracks tutorial steps
-    private bool timerActive = false; // Determines if the timer should be running
-    private float timeRemaining = 3f; // 2 minutes countdown
-    private bool timeSelected = false; // Prevents the timer from starting before selection
+    // -- UI panels ---------------------------------------------
+    public GameObject tiger;                      // The tiger GameObject to activate in Scenario 2
+    public GameObject menu;                       // Main UI panel (Game Menu)
+    public GameObject timeSelectionCanvas;        // The Time Selection UI panel
 
-    public void Start()
+    // -- UI buttons --------------------------------------------
+    public Button continueButton;                 // Main "Continue" button for tutorial steps
+    public Button noonButton, eveningButton, nightButton; // Buttons for choosing time of day
+    public Button timeContinueButton;             // "Continue" button inside the time-selection canvas
+
+    // -- UI text elements --------------------------------------
+    public TextMeshProUGUI instructionText;       // Instructional text shown to the player
+    public TextMeshProUGUI timerText;             // UI text showing the countdown timer
+
+    // -- Internal state ----------------------------------------
+    private int step = 0;                         // Tracks which tutorial step we're on
+    private bool timerActive = false;             // Whether the countdown timer is running
+    private float timeRemaining = 60f;             // Duration of the countdown in seconds
+    private bool timeSelected = false;            // Whether the player has picked a time
+
+   public void Start()
     {
-        // Assign the tutorial continue button
+        // 1) Show name input canvas first; hide everything else until a name is entered
+        nameInputCanvas.SetActive(true);
+        menu.SetActive(false);
+        timeSelectionCanvas.SetActive(false);
+
+        // 2) Register callback for when the player clicks "Start" on the name-input canvas
+        nameInputUI.startGameButton.onClick.AddListener(OnNameEntered);
+
+        // 3) Set up tutorial continue button
         if (continueButton != null)
             continueButton.onClick.AddListener(NextStep);
         else
             Debug.LogError("Continue Button is not assigned!");
 
-        // Hide the timer and Time Selection UI at the start
+        // 4) Hide timer UI at the beginning
         timerText.gameObject.SetActive(false);
-        timeSelectionCanvas.SetActive(false);
 
-        // Assign time selection buttons
-        if (noonButton != null) noonButton.onClick.AddListener(() => SelectTime("Noon"));
+        // 5) Register time-selection buttons
+        if (noonButton != null)    noonButton.onClick.AddListener(() => SelectTime("Noon"));
         if (eveningButton != null) eveningButton.onClick.AddListener(() => SelectTime("Evening"));
-        if (nightButton != null) nightButton.onClick.AddListener(() => SelectTime("Night"));
+        if (nightButton != null)   nightButton.onClick.AddListener(() => SelectTime("Night"));
 
-        // Assign the new Continue button inside TimeSelectionCanvas
+        // 6) Register the Continue button inside the time-selection canvas
         if (timeContinueButton != null)
             timeContinueButton.onClick.AddListener(StartTimer);
+        else
+            Debug.LogError("Time Continue Button is not assigned!");
     }
 
-    public void Update()
+    void OnNameEntered()
     {
-        if (head == null) return;
+        // Called when the player has entered their name and clicked Start
+        nameEntered = true;
+        nameInputCanvas.SetActive(false);       // Hide the name-input UI
+        menu.SetActive(true);                   // Show the main menu UI
+        continueButton.gameObject.SetActive(true); 
+        // Optionally show a welcome message:
+        instructionText.text = "Welcome, " + nameInputUI.nameInputField.text + "! Let's begin.";
+    }
 
-        // Update the Game Menu UI position if it's active
-        if (menu.activeSelf)
-        {
-            Vector3 targetPosition = head.position + head.forward * spwnDistance;
-            targetPosition.y = head.position.y;
-            menu.transform.position = Vector3.Lerp(menu.transform.position, targetPosition, Time.deltaTime * smoothSpeed);
-
-            Vector3 lookDirection = head.position - menu.transform.position;
-            lookDirection.y = 0;
-            menu.transform.rotation = Quaternion.LookRotation(-lookDirection);
-        }
-
-        // Update the Time Selection Canvas position if it's active
-        if (timeSelectionCanvas.activeSelf)
-        {
-            Vector3 targetTimePosition = head.position + head.forward * spwnDistance;
-            targetTimePosition.y = head.position.y;
-            timeSelectionCanvas.transform.position = Vector3.Lerp(timeSelectionCanvas.transform.position, targetTimePosition, Time.deltaTime * smoothSpeed);
-
-            Vector3 timeLookDirection = head.position - timeSelectionCanvas.transform.position;
-            timeLookDirection.y = 0;
-            timeSelectionCanvas.transform.rotation = Quaternion.LookRotation(-timeLookDirection);
-        }
-
-        // Handle the countdown timer after time is selected
+   public void Update()
+    {
+        // If the countdown timer is active, update it each frame
         if (timerActive && timeSelected)
         {
             if (timeRemaining > 0)
@@ -83,6 +87,7 @@ public class GameMenuUiScenario1 : MonoBehaviour
             }
             else
             {
+                // When time runs out, transition to Scenario 2
                 timerActive = false;
                 timeRemaining = 0;
                 ShowScenario2Message();
@@ -90,9 +95,9 @@ public class GameMenuUiScenario1 : MonoBehaviour
         }
     }
 
-    // Called when the tutorial continue button is pressed
     void NextStep()
     {
+        // Advance to the next tutorial step
         step++;
 
         switch (step)
@@ -104,20 +109,17 @@ public class GameMenuUiScenario1 : MonoBehaviour
                 instructionText.text = "To grab an object, press the grip button.";
                 break;
             case 3:
-                instructionText.text = "You're ready! Select the time of day.";
-                continueButton.gameObject.SetActive(false); // Hide the main continue button
-
-                // Show the Time Selection UI and hide the Game Menu UI
-                timeSelectionCanvas.SetActive(true);
-                menu.SetActive(false);
+                instructionText.text = "All set, enjoy the  adventure..";
+                continueButton.gameObject.SetActive(false); // Hide the tutorial button
+                timeSelectionCanvas.SetActive(true);        // Show time-selection UI
+                menu.SetActive(false);                      // Hide main menu
                 break;
         }
     }
 
-    // Called when a time is selected (Noon, Evening, or Night)
     void SelectTime(string timeOfDay)
     {
-        // Update the lighting based on the selected time
+        // Apply lighting settings based on the chosen time
         switch (timeOfDay)
         {
             case "Noon":
@@ -131,26 +133,20 @@ public class GameMenuUiScenario1 : MonoBehaviour
                 break;
         }
 
-        // Mark that a time was selected
-        timeSelected = true;
-
-        // Show the Continue button inside Time Selection Canvas after a time is selected
-        timeContinueButton.gameObject.SetActive(true);
+        timeSelected = true;                           
+        timeContinueButton.gameObject.SetActive(true); // Enable continue once a choice is made
     }
 
-    // Called when the Continue button in Time Selection Canvas is pressed
     void StartTimer()
     {
+        // Only begin the countdown if the player has selected a time
         if (timeSelected)
         {
-            // Hide the Time Selection UI
-            timeSelectionCanvas.SetActive(false);
-            // Bring back the Game Menu UI (which now will show the timer)
-            menu.SetActive(true);
+            timeSelectionCanvas.SetActive(false); // Hide time-selection UI
+            menu.SetActive(true);                 // Show main menu again
 
-            // Start the timer and show the timer text
-            timerActive = true;
-            timerText.gameObject.SetActive(true);
+            timerActive = true;                   // Start the timer
+            timerText.gameObject.SetActive(true); // Display the timer text
         }
         else
         {
@@ -158,51 +154,43 @@ public class GameMenuUiScenario1 : MonoBehaviour
         }
     }
 
-    // Update the sun's lighting based on the given parameters
     void UpdateLighting(float sunAngle, float temperature, float intensity, float indirectMultiplier)
     {
+        // Adjust the environment's lighting if a directional light ("sun") is present
         if (RenderSettings.sun != null)
         {
-            // Rotate the sun
             RenderSettings.sun.transform.rotation = Quaternion.Euler(
                 Mathf.Lerp(-10, 50, sunAngle / 24f), -30, 0
             );
-
-            // Adjust the lighting properties
             RenderSettings.sun.colorTemperature = temperature;
             RenderSettings.sun.intensity = intensity;
             RenderSettings.sun.bounceIntensity = indirectMultiplier;
         }
     }
 
-    // Update the timer text UI
     void UpdateTimerUI()
     {
+        // Format and display the remaining time as MM:SS
         int minutes = Mathf.FloorToInt(timeRemaining / 60);
         int seconds = Mathf.FloorToInt(timeRemaining % 60);
         timerText.text = $"Time Left: {minutes:00}:{seconds:00}";
     }
 
-    // Called when the timer finishes
     void ShowScenario2Message()
     {
-        instructionText.text = "Scenario 2 is starting!";
+        // Notify the player that Scenario 2 is starting, then trigger it
+        instructionText.text = "Scenario 2 is starting! Follow the tiger.";
         timerText.gameObject.SetActive(false);
-        // Start a coroutine to close the Game Menu UI after 5 seconds
         StartCoroutine(CloseCanvasAfterDelay(5f));
-        //begin scenario 2
-        FindFirstObjectByType<Scenario2Manager>()?.BeginScenario2();
+        //start scenario 2
+        Object.FindAnyObjectByType<Scenario2Manager>()?.BeginScenario2();
         tiger.SetActive(true);
-
-
-    StartCoroutine(CloseCanvasAfterDelay(5f));
     }
 
-    // Coroutine: Wait for the specified delay, then close the Game Menu UI
-    System.Collections.IEnumerator CloseCanvasAfterDelay(float delay)
+    IEnumerator CloseCanvasAfterDelay(float delay)
     {
+        // Wait, then hide the main menu canvas
         yield return new WaitForSeconds(delay);
-        // Close (disable) the Game Menu UI canvas
         menu.SetActive(false);
     }
 }
