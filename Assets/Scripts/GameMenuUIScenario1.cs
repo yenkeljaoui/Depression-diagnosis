@@ -5,6 +5,8 @@ using System.Collections;
 
 public class GameMenuUiScenario1 : MonoBehaviour
 {
+    private PerformanceLoggerScenario1 performanceLogger;
+
     // -- Player name input UI ----------------------------------
     public GameObject nameInputCanvas;            // Canvas for entering the player's name
     public PlayerNameInputUI nameInputUI;         // Reference to the PlayerNameInputUI script
@@ -30,11 +32,13 @@ public class GameMenuUiScenario1 : MonoBehaviour
     // -- Internal state ----------------------------------------
     private int step = 0;                         // Tracks which tutorial step we're on
     private bool timerActive = false;             // Whether the countdown timer is running
-    private float timeRemaining = 60f;             // Duration of the countdown in seconds
+    private float timeRemaining = 10f;             // Duration of the countdown in seconds
     private bool timeSelected = false;            // Whether the player has picked a time
 
    public void Start()
     {
+        performanceLogger = GetComponent<PerformanceLoggerScenario1>();
+
         // 1) Show name input canvas first; hide everything else until a name is entered
         nameInputCanvas.SetActive(true);
         menu.SetActive(false);
@@ -139,6 +143,13 @@ public class GameMenuUiScenario1 : MonoBehaviour
 
     void StartTimer()
     {
+        // Set player name before starting the logger
+        if (performanceLogger != null)
+        {
+            performanceLogger.playerName = nameInputUI.nameInputField.text;
+            performanceLogger.StartLogging();
+        }
+
         // Only begin the countdown if the player has selected a time
         if (timeSelected)
         {
@@ -148,10 +159,7 @@ public class GameMenuUiScenario1 : MonoBehaviour
             timerActive = true;                   // Start the timer
             timerText.gameObject.SetActive(true); // Display the timer text
         }
-        else
-        {
-            Debug.LogWarning("You must select a time before continuing.");
-        }
+        else{Debug.LogWarning("You must select a time before continuing.");}
     }
 
     void UpdateLighting(float sunAngle, float temperature, float intensity, float indirectMultiplier)
@@ -178,6 +186,7 @@ public class GameMenuUiScenario1 : MonoBehaviour
 
     void ShowScenario2Message()
     {
+        performanceLogger?.StopAndSave();
         // Notify the player that Scenario 2 is starting, then trigger it
         instructionText.text = "Scenario 2 is starting! Follow the tiger.";
         timerText.gameObject.SetActive(false);
