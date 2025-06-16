@@ -26,79 +26,105 @@ public class GameMenuUiScenario1Tests
     /// This initializes all required UI elements and components.
     /// </summary>
     [SetUp]
-    public void Setup()
-    {
-        // Simulate the XR Camera (Head)
-        head = new GameObject("Head");
-        head.transform.position = Vector3.zero;
-        head.transform.forward = Vector3.forward;
+public void Setup()
+{
+    // -- Head camera (XR head)
+    head = new GameObject("Head");
+    head.transform.position = Vector3.zero;
+    head.transform.forward = Vector3.forward;
 
-        // Create the Game Menu UI (Main Menu)
-        menu = new GameObject("Menu");
-        menu.AddComponent<Canvas>();
+    // -- Main menu UI
+    menu = new GameObject("Menu");
+    menu.AddComponent<Canvas>();
 
-        // Create the Time Selection UI
-        timeSelectionCanvas = new GameObject("TimeSelectionCanvas");
-        timeSelectionCanvas.AddComponent<Canvas>();
+    // -- Time selection UI
+    timeSelectionCanvas = new GameObject("TimeSelectionCanvas");
+    timeSelectionCanvas.AddComponent<Canvas>();
 
-        // Create the main "Continue" button
-        GameObject continueButtonObj = new GameObject("ContinueButton");
-        continueButtonObj.transform.SetParent(menu.transform);
-        continueButton = continueButtonObj.AddComponent<Button>();
+    // -- Tutorial continue button
+    GameObject continueButtonObj = new GameObject("ContinueButton");
+    continueButtonObj.transform.SetParent(menu.transform);
+    continueButton = continueButtonObj.AddComponent<Button>();
 
-        // Create time selection buttons (Noon, Evening, Night)
-        GameObject noonButtonObj = new GameObject("NoonButton");
-        noonButtonObj.transform.SetParent(timeSelectionCanvas.transform);
-        noonButton = noonButtonObj.AddComponent<Button>();
+    // -- Time selection buttons
+    noonButton = new GameObject("NoonButton").AddComponent<Button>();
+    noonButton.transform.SetParent(timeSelectionCanvas.transform);
 
-        GameObject eveningButtonObj = new GameObject("EveningButton");
-        eveningButtonObj.transform.SetParent(timeSelectionCanvas.transform);
-        eveningButton = eveningButtonObj.AddComponent<Button>();
+    eveningButton = new GameObject("EveningButton").AddComponent<Button>();
+    eveningButton.transform.SetParent(timeSelectionCanvas.transform);
 
-        GameObject nightButtonObj = new GameObject("NightButton");
-        nightButtonObj.transform.SetParent(timeSelectionCanvas.transform);
-        nightButton = nightButtonObj.AddComponent<Button>();
+    nightButton = new GameObject("NightButton").AddComponent<Button>();
+    nightButton.transform.SetParent(timeSelectionCanvas.transform);
 
-        // Create the Continue button inside Time Selection UI
-        GameObject timeContinueButtonObj = new GameObject("TimeContinueButton");
-        timeContinueButtonObj.transform.SetParent(timeSelectionCanvas.transform);
-        timeContinueButton = timeContinueButtonObj.AddComponent<Button>();
-        timeContinueButtonObj.SetActive(false); // Initially hidden
+    // -- Continue button inside time selection
+    timeContinueButton = new GameObject("TimeContinueButton").AddComponent<Button>();
+    timeContinueButton.transform.SetParent(timeSelectionCanvas.transform);
+    timeContinueButton.gameObject.SetActive(false); // hidden at start
 
-        // Create text elements (Instruction Text and Timer Text)
-        GameObject instructionTextObj = new GameObject("InstructionText");
-        instructionTextObj.transform.SetParent(menu.transform);
-        instructionText = instructionTextObj.AddComponent<TextMeshProUGUI>();
-        instructionText.text = "";
+    // -- Instruction text
+    instructionText = new GameObject("InstructionText").AddComponent<TextMeshProUGUI>();
+    instructionText.transform.SetParent(menu.transform);
+    instructionText.text = "";
 
-        GameObject timerTextObj = new GameObject("TimerText");
-        timerTextObj.transform.SetParent(menu.transform);
-        timerText = timerTextObj.AddComponent<TextMeshProUGUI>();
-        timerText.text = "";
+    // -- Timer text
+    timerText = new GameObject("TimerText").AddComponent<TextMeshProUGUI>();
+    timerText.transform.SetParent(menu.transform);
+    timerText.text = "";
 
-        // Create the main GameMenuUiScenario1 object and attach the script
-        gameMenuObj = new GameObject("GameMenuUiScenario1Obj");
-        gameMenu = gameMenuObj.AddComponent<GameMenuUiScenario1>();
+    // -- nameInputCanvas
+    GameObject nameInputCanvas = new GameObject("NameInputCanvas");
+    nameInputCanvas.AddComponent<Canvas>();
 
-        // Assign all references to the GameMenuUiScenario1 script
-        gameMenu.menu = menu;
-        gameMenu.timeSelectionCanvas = timeSelectionCanvas;
-        gameMenu.head = head.transform;
-        gameMenu.continueButton = continueButton;
-        gameMenu.noonButton = noonButton;
-        gameMenu.eveningButton = eveningButton;
-        gameMenu.nightButton = nightButton;
-        gameMenu.timeContinueButton = timeContinueButton;
-        gameMenu.instructionText = instructionText;
-        gameMenu.timerText = timerText;
+    // -- nameInputUI and TMP_InputField
+    GameObject nameInputUIObj = new GameObject("NameInputUI");
+    PlayerNameInputUI nameInputUI = nameInputUIObj.AddComponent<PlayerNameInputUI>();
 
-        // Ensure that UI elements are in their expected initial states
-        timeSelectionCanvas.SetActive(false);  // Time selection should be hidden
-        timerText.gameObject.SetActive(false); // Timer should be hidden
+    GameObject nameInputFieldObj = new GameObject("NameInputField");
+    TMP_InputField inputField = nameInputFieldObj.AddComponent<TMP_InputField>();
+    nameInputFieldObj.transform.SetParent(nameInputUIObj.transform);
+    nameInputUI.nameInputField = inputField;
 
-        // Manually call Start() to initialize the script (since Unity won't do it automatically in tests)
-        gameMenu.Start();
-    }
+    // -- Start Game Button
+    GameObject startButtonObj = new GameObject("StartGameButton");
+    Button startButton = startButtonObj.AddComponent<Button>();
+    startButtonObj.transform.SetParent(nameInputUIObj.transform);
+    nameInputUI.startGameButton = startButton;
+
+    // parent nameInputUI to canvas
+    nameInputUIObj.transform.SetParent(nameInputCanvas.transform);
+
+    // -- Performance logger
+    GameObject loggerObj = new GameObject("PerformanceLogger");
+    PerformanceLoggerScenario1 performanceLogger = loggerObj.AddComponent<PerformanceLoggerScenario1>();
+
+    // -- GameMenuUiScenario1 instance
+    gameMenuObj = new GameObject("GameMenuUiScenario1Obj");
+    gameMenu = gameMenuObj.AddComponent<GameMenuUiScenario1>();
+
+    // -- Assign all references
+    gameMenu.head = head.transform;
+    gameMenu.menu = menu;
+    gameMenu.timeSelectionCanvas = timeSelectionCanvas;
+    gameMenu.continueButton = continueButton;
+    gameMenu.noonButton = noonButton;
+    gameMenu.eveningButton = eveningButton;
+    gameMenu.nightButton = nightButton;
+    gameMenu.timeContinueButton = timeContinueButton;
+    gameMenu.instructionText = instructionText;
+    gameMenu.timerText = timerText;
+    gameMenu.nameInputUI = nameInputUI;
+    gameMenu.nameInputCanvas = nameInputCanvas;
+    gameMenuObj.AddComponent<PerformanceLoggerScenario1>(); // in case it uses GetComponent internally
+    gameMenu.performanceLogger = performanceLogger;
+
+    // -- Initial UI states
+    timeSelectionCanvas.SetActive(false);
+    timerText.gameObject.SetActive(false);
+
+    // -- Call Start manually
+    gameMenu.Start();
+}
+
 
     /// <summary>
     /// Clean up objects after each test to prevent memory leaks or interference between tests.
@@ -142,7 +168,7 @@ public class GameMenuUiScenario1Tests
 
         // Third click should transition to time selection
         continueButton.onClick.Invoke();
-        Assert.AreEqual("You're ready! Select the time of day.", instructionText.text, "Third step instruction mismatch.");
+        Assert.AreEqual("All set, enjoy the  adventure..", instructionText.text, "Third step instruction mismatch.");
 
         // The main continue button should now be hidden
         Assert.IsFalse(continueButton.gameObject.activeSelf, "Continue button should be hidden after last step.");

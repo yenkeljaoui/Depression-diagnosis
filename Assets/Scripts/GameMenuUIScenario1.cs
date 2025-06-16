@@ -5,7 +5,7 @@ using System.Collections;
 
 public class GameMenuUiScenario1 : MonoBehaviour
 {
-    private PerformanceLoggerScenario1 performanceLogger;
+    public PerformanceLoggerScenario1 performanceLogger;
 
     // -- Player name input UI ----------------------------------
     public GameObject nameInputCanvas;            // Canvas for entering the player's name
