@@ -32,7 +32,7 @@ public class GameMenuUiScenario1 : MonoBehaviour
     // -- Internal state ----------------------------------------
     private int step = 0;                         // Tracks which tutorial step we're on
     private bool timerActive = false;             // Whether the countdown timer is running
-    private float timeRemaining = 10f;             // Duration of the countdown in seconds
+    private float timeRemaining = 60f;             // Duration of the countdown in seconds
     private bool timeSelected = false;            // Whether the player has picked a time
 
    public void Start()
