@@ -51,8 +51,6 @@ private System.Collections.IEnumerator Showtask_Scenario2(float duration)
         playerChoseToHelp = false;
 
         playerDataManager.LogEvent("BeastHelpChoice", "Player chose NO to help the beast");
-         //begin scenario 3
-        FindFirstObjectByType<Scenario3Manager>()?.BeginScenario3();
     }
 
     public bool DidPlayerChooseToHelp()

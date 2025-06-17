@@ -191,8 +191,6 @@ public class GameMenuUiScenario1 : MonoBehaviour
         instructionText.text = "Scenario 2 is starting! Follow the tiger.";
         timerText.gameObject.SetActive(false);
         StartCoroutine(CloseCanvasAfterDelay(5f));
-        //start scenario 2
-        Object.FindAnyObjectByType<Scenario2Manager>()?.BeginScenario2();
         tiger.SetActive(true);
     }
 
