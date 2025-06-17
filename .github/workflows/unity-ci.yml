@@ -1,12 +1,10 @@
-name: Unity Build and PlayMode Tests 🚀
+name: Unity CI - Tests Only 🎯
 
 on:
   push:
-    branches:
-      - dev
+    branches: [dev]
   pull_request:
-    branches:
-      - dev
+    branches: [dev]
 
 permissions:
   contents: read
@@ -16,66 +14,62 @@ env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
 
 jobs:
-  testRunner:
-    name: Run PlayMode Tests 🎯
+  playModeTests:
+    name: Run PlayMode Tests 🕹️
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run PlayMode tests (Unity 6000.0.41f1)
+      - name: Run PlayMode tests
         uses: game-ci/unity-test-runner@v4
-        id: testRunner
+        id: playmode
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          unityVersion: 6000.0.41f1
+          unityVersion: 2023.2.0f1
           testMode: playmode
           projectPath: .
           customParameters: -disable-rendering -logFile /dev/stdout
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload Test Results
+      - name: Upload PlayMode Test Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: PlayModeTestResults
-          path: ${{ steps.testRunner.outputs.artifactsPath }}
+          path: ${{ steps.playmode.outputs.artifactsPath }}
 
-  buildWebGL:
-    needs: testRunner
-    name: Build for WebGL 🌐
+  editModeTests:
+    name: Run EditMode Tests 🧪
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-     
-      - name: Restore Library cache
-        uses: actions/cache@v4
-        with:
-          path: Library
-          key: Library-build-WebGL
-          restore-keys: |
-            Library-build-
-            Library-
-
-      - name: Build for WebGL (Unity 6000.0.41f1)
-        uses: game-ci/unity-builder@v4
+      - name: Run EditMode tests
+        uses: game-ci/unity-test-runner@v4
+        id: editmode
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          unityVersion: 6000.0.41f1
-          targetPlatform: WebGL
+          unityVersion: 2023.2.0f1
+          testMode: editmode
+          projectPath: .
+          customParameters: -logFile /dev/stdout
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload WebGL Build
+      - name: Upload EditMode Test Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: build-WebGL
-          path: build/WebGL
+          name: EditModeTestResults
+          path: ${{ steps.editmode.outputs.artifactsPath }}
+
+
