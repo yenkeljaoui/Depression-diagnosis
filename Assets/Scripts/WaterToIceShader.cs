@@ -78,8 +78,6 @@ public void UnfreezeLake()
             playerDataManager.LogEvent("LakeUnfrozen", "Player touched the tree and unfroze the lake");
             Debug.Log("Player touched the tree and unfroze the lake");
             task_Scenario2.SetActive(false);
-            //begin scenario 3
-            FindFirstObjectByType<Scenario3Manager>()?.BeginScenario3();
 
         }
         else
