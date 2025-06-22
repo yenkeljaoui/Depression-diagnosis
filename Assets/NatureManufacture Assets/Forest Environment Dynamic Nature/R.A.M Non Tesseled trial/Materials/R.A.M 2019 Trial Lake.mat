@@ -13,14 +13,13 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _SPECULAR_SETUP
-  - _SURFACE_TYPE_TRANSPARENT
   m_InvalidKeywords: []
   m_LightmapFlags: 6
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 1
   m_CustomRenderQueue: -1
   stringTagMap:
-    RenderType: Transparent
+    RenderType: Opaque
   disabledShaderPasses:
   - SHADOWCASTER
   m_LockedProperties: 
@@ -287,7 +286,7 @@ Material:
     - _AddPrecomputedVelocity: 0
     - _AlphaClip: 0
     - _AlphaToMask: 0
-    - _BackfaceAlpha: 0.85
+    - _BackfaceAlpha: 0.2
     - _BigCascadeAngle: 10.2
     - _BigCascadeAngleFalloff: 2.3
     - _BigCascadeFalloff: 80
@@ -358,7 +357,7 @@ Material:
     - _DetailSmoothness: 1
     - _Distortion: 0.191
     - _DistortionBackface: 20
-    - _DstBlend: 10
+    - _DstBlend: 0
     - _DstBlendAlpha: 10
     - _EdgeFalloffMultiply: 5.19
     - _EdgeFalloffPower: 0.74
@@ -455,9 +454,9 @@ Material:
     - _SpecSource: 0
     - _Specular: 0.1
     - _SpecularHighlights: 1
-    - _SrcBlend: 5
+    - _SrcBlend: 1
     - _SrcBlendAlpha: 1
-    - _Surface: 1
+    - _Surface: 0
     - _TessMax: 11
     - _TessMaxDisp: 11
     - _TessMin: 0
@@ -471,8 +470,8 @@ Material:
     - _UseFlowMapping1: 1
     - _Vdirection: 0
     - _VertexOffsetScale: 0.1
-    - _WaterAlphaMultiply: 0.66
-    - _WaterAlphaPower: 1.96
+    - _WaterAlphaMultiply: 0.1
+    - _WaterAlphaPower: 1
     - _WaterDeepTranslucencyPower: 0.1
     - _WaterDepth: 0.143
     - _WaterFallOfBorder: 9.32
@@ -484,7 +483,7 @@ Material:
     - _WaterShalowDepth: 3.85
     - _WaterShalowFalloff: -3.43
     - _WaterShalowTranslucencyPower: 0
-    - _WaterSmoothness: 0.98
+    - _WaterSmoothness: 0.6
     - _WaterSpecular: 0.1
     - _WaterSpecularClose: 0.19
     - _WaterSpecularFar: 0.255
@@ -495,10 +494,10 @@ Material:
     - _WaterTranslucencyMultiply: 1.98
     - _WaterTranslucencyPower: 0.55
     - _WaterTransparency: 0
-    - _WaveTranslucencyFallOffDistance: 30
-    - _WaveTranslucencyHardness: 0.72
+    - _WaveTranslucencyFallOffDistance: 5
+    - _WaveTranslucencyHardness: 0.5
     - _WaveTranslucencyMultiply: 0.2
-    - _WaveTranslucencyPower: 0.88
+    - _WaveTranslucencyPower: 0.8
     - _WavesVertexOffsetALPHA: 0
     - _WorkflowMode: 0
     - _ZTest: 4
@@ -518,7 +517,7 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Color0: {r: 0, g: 0.6749488, b: 0.8088235, a: 0}
     - _Color1: {r: 0, g: 0.048731543, b: 0.22794023, a: 0}
-    - _DeepColor: {r: 0, g: 0, b: 0, a: 0}
+    - _DeepColor: {r: 0.15233251, g: 0.0478533, b: 0.5396226, a: 0}
     - _Detail1MainSpeed: {r: 1, g: 1, b: 0, a: 0}
     - _Detail1Tiling: {r: 3, g: 3, b: 0, a: 0}
     - _Detail2AlbedoColor: {r: 1, g: 1, b: 1, a: 0}

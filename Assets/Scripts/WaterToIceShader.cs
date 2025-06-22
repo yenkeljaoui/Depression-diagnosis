@@ -30,11 +30,9 @@ public class LakeFreezingTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Object entered: " + other.gameObject.name); // Debug log
 
         if (!isFrozen && other.CompareTag("Animal")) // Only freeze if it's an animal
         {
-            Debug.Log("Animal entered the lake, freezing it...");
             FreezeLake();
         }
     }

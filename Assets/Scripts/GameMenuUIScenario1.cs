@@ -107,7 +107,7 @@ public class GameMenuUiScenario1 : MonoBehaviour
         switch (step)
         {
             case 1:
-                instructionText.text = "To move, use the left joystick.";
+                instructionText.text = "To move, use the joystick.";
                 break;
             case 2:
                 instructionText.text = "To grab an object, press the grip button.";
