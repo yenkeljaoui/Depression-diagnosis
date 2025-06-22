@@ -2,9 +2,10 @@ name: Unity CI - Tests Only 🎯
 
 on:
   push:
-    branches: [dev]
-  pull_request:
-    branches: [dev]
+    branches:
+      - sprint5And6
+      - deploy
+  
 
 permissions:
   contents: read
