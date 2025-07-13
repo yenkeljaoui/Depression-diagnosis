@@ -32,9 +32,10 @@ public class GameMenuUiScenario1 : MonoBehaviour
     // -- Internal state ----------------------------------------
     private int step = 0;                         // Tracks which tutorial step we're on
     private bool timerActive = false;             // Whether the countdown timer is running
-    private float timeRemaining = 60f;             // Duration of the countdown in seconds
+    private float timeRemaining = 120f;             // Duration of the countdown in seconds
     private bool timeSelected = false;            // Whether the player has picked a time
-
+    public GameObject block1;
+    [SerializeField] private PlayerDataManager dataManager;
    public void Start()
     {
         performanceLogger = GetComponent<PerformanceLoggerScenario1>();
@@ -57,9 +58,9 @@ public class GameMenuUiScenario1 : MonoBehaviour
         timerText.gameObject.SetActive(false);
 
         // 5) Register time-selection buttons
-        if (noonButton != null)    noonButton.onClick.AddListener(() => SelectTime("Noon"));
+        if (noonButton != null) noonButton.onClick.AddListener(() => SelectTime("Noon"));
         if (eveningButton != null) eveningButton.onClick.AddListener(() => SelectTime("Evening"));
-        if (nightButton != null)   nightButton.onClick.AddListener(() => SelectTime("Night"));
+        if (nightButton != null) nightButton.onClick.AddListener(() => SelectTime("Night"));
 
         // 6) Register the Continue button inside the time-selection canvas
         if (timeContinueButton != null)
@@ -111,9 +112,11 @@ public class GameMenuUiScenario1 : MonoBehaviour
                 break;
             case 2:
                 instructionText.text = "To grab an object, press the grip button.";
+                block1.SetActive(true);
                 break;
             case 3:
-                instructionText.text = "All set, enjoy the  adventure..";
+                block1.SetActive(false);
+                instructionText.text = "All set! Feel free to walk around the forest till the timer up there stops. :)";
                 continueButton.gameObject.SetActive(false); // Hide the tutorial button
                 timeSelectionCanvas.SetActive(true);        // Show time-selection UI
                 menu.SetActive(false);                      // Hide main menu
@@ -136,7 +139,7 @@ public class GameMenuUiScenario1 : MonoBehaviour
                 UpdateLighting(0f, 9000f, 0.3f, 0.5f);
                 break;
         }
-
+        dataManager.SetTimeOfDay(timeOfDay);
         timeSelected = true;                           
         timeContinueButton.gameObject.SetActive(true); // Enable continue once a choice is made
     }
@@ -190,7 +193,7 @@ public class GameMenuUiScenario1 : MonoBehaviour
         // Notify the player that Scenario 2 is starting, then trigger it
         instructionText.text = "Scenario 2 is starting! Follow the tiger.";
         timerText.gameObject.SetActive(false);
-        StartCoroutine(CloseCanvasAfterDelay(5f));
+        StartCoroutine(CloseCanvasAfterDelay(10f));
         //start scenario 2
         Object.FindAnyObjectByType<Scenario2Manager>()?.BeginScenario2();
         tiger.SetActive(true);

@@ -64,6 +64,8 @@ public class Scenario2Manager : MonoBehaviour
 
         // 3) Snap the XR Rig root to the corrected destination
         xrRigRoot.position = dest;
+        xrRigRoot.rotation = scenario2StartPoint.rotation;
+
 
         // 4) Wait a physics step so the CC can re-evaluate isGrounded
         yield return new WaitForFixedUpdate();

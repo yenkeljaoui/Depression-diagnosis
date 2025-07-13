@@ -9,13 +9,18 @@ public class LakeFreezingTrigger : MonoBehaviour
     public BeastHelpManager helpManager; // Assign in Inspector
     public PlayerDataManager playerDataManager; // Assign in Inspector
     public GameObject task_Scenario2; // canvas help scenario2
-    
+
+    public GameObject campfire;
+    public GameObject irontorch;
+    public GameObject CanfasTurnoncampfire;
+    public GameObject Guitar;
+
 
 
 
     void Start()
     {
-       // FindFirstObjectByType<Scenario3Manager>()?.BeginScenario3();
+        // FindFirstObjectByType<Scenario3Manager>()?.BeginScenario3();
         lakeRenderer = GetComponent<Renderer>();
 
         if (lakeRenderer == null)
@@ -36,54 +41,57 @@ public class LakeFreezingTrigger : MonoBehaviour
             FreezeLake();
         }
     }
-void FreezeLake()
-{
-    if (lakeRenderer != null && iceMaterial != null)
+    void FreezeLake()
     {
-        lakeRenderer.material = iceMaterial;
-        isFrozen = true;
-        Debug.Log("Lake is now frozen!");
-
-        if (helpManager != null)
+        if (lakeRenderer != null && iceMaterial != null)
         {
-            helpManager.ShowHelpDialog(); // Show dialog when lake is frozen
+            lakeRenderer.material = iceMaterial;
+            isFrozen = true;
+            Debug.Log("Lake is now frozen!");
+
+            if (helpManager != null)
+            {
+                helpManager.ShowHelpDialog(); // Show dialog when lake is frozen
+            }
+            else
+            {
+                Debug.LogWarning("Help Manager not assigned.");
+            }
         }
         else
         {
-            Debug.LogWarning("Help Manager not assigned.");
+            Debug.LogError("Missing Ice Material or Renderer!");
         }
     }
-    else
+
+
+
+
+    public void UnfreezeLake()
     {
-        Debug.LogError("Missing Ice Material or Renderer!");
-    }
-}
-
-
-
-
-public void UnfreezeLake()
-{
-    if (lakeRenderer != null && waterMaterial != null)
-    {
-        lakeRenderer.material = waterMaterial;
-        isFrozen = false;
-        Debug.Log("Lake has been unfrozen!");
-
-        // Log event
-        if (playerDataManager != null)
+        if (lakeRenderer != null && waterMaterial != null)
         {
-            playerDataManager.LogEvent("LakeUnfrozen", "Player touched the tree and unfroze the lake");
-            Debug.Log("Player touched the tree and unfroze the lake");
-            task_Scenario2.SetActive(false);
-            //begin scenario 3
-            FindFirstObjectByType<Scenario3Manager>()?.BeginScenario3();
+            lakeRenderer.material = waterMaterial;
+            isFrozen = false;
+            Debug.Log("Lake has been unfrozen!");
 
-        }
-        else
-        {
-            Debug.LogWarning("PlayerDataManager not assigned to LakeFreezingTrigger.");
-        }
+            // Log event
+            if (playerDataManager != null)
+            {
+                playerDataManager.LogEvent("LakeUnfrozen", "Player touched the tree and unfroze the lake");
+                Debug.Log("Player touched the tree and unfroze the lake");
+                task_Scenario2.SetActive(false);
+                //begin scenario 3
+                FindFirstObjectByType<Scenario3Manager>()?.BeginScenario3();
+                campfire.SetActive(true);
+                irontorch.SetActive(true);
+                CanfasTurnoncampfire.SetActive(true);
+                Guitar.SetActive(true);
+            }
+            else
+            {
+                Debug.LogWarning("PlayerDataManager not assigned to LakeFreezingTrigger.");
+            }
     }
     else
     {

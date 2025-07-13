@@ -7,10 +7,14 @@ public class PlayerDataManager : MonoBehaviour
     private string filePath;
     public PlayerSessionData sessionData;
     public string playerName;
-
     private void Awake()
     {
         sessionData = new PlayerSessionData();
+    }
+    public void SetTimeOfDay(string timeOfDay)
+    {
+        sessionData.selectedTimeOfDay = timeOfDay;
+        Debug.Log($"Saved timeOfDay: {timeOfDay}");
     }
 
     public void SetPlayerName(string name)
@@ -74,6 +78,8 @@ public class PlayerDataManager : MonoBehaviour
 public class PlayerSessionData
 {
     public List<PlayerEvent> events = new List<PlayerEvent>();
+    public string selectedTimeOfDay;
+
 }
 
 [System.Serializable]
