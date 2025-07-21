@@ -113,9 +113,10 @@ DepressionDiagnosisVR/
 
 ## 🚀 Installation & Running the Project
 
-1. Open the project in **Unity 2023.2.0f1**
-2. Ensure **XR Plug-in Management** is enabled with **Oculus** as the selected provider
-3. Open the `Forest Demo Scene` under `Assets/Scenes/`
-4. Connect your **Meta Quest 3** via **Oculus Link** and press **Play**
+1. Clone the project using git clone https://github.com/your-user-name/your-project-name.git
+2. Open the project in **Unity 2023.2.0f1**
+3. Open the scene located at:
+   Assets/NatureManufacture Assets/Forest Environment Dynamic Nature/Demo Scenes/Forest_Demo_Scene.unity
+4. press Play to run
 5. To build and install the APK manually, use:
     adb install ProjectBuild.apk
